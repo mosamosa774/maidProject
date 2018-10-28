@@ -1,5 +1,4 @@
 # coding UTF-8
-# ssh -R 52698:127.0.0.1:52698 pi@192.168.1.7
 
 import asyncio
 import voiceGenerator
