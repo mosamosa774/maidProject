@@ -1,0 +1,34 @@
+[
+  {
+    "Title": "はてなブックマークのテクノロジーの特集記事一覧",
+    "RSS_URL": "http://b.hatena.ne.jp/hotentry/it.rss"
+  },
+  {
+    "Title": "はてなブックマークの総合カテゴリーの特集記事一覧",
+    "RSS_URL": "http://b.hatena.ne.jp/hotentry/all.rss"
+  },
+  {
+    "Title": "Yahoo!ニュース・トピックス - 科学",
+    "RSS_URL": "https://news.yahoo.co.jp/pickup/science/rss.xml"
+  },
+  {
+    "Title": "Yahoo!ニュース・トピックス - 国際",
+    "RSS_URL": "https://news.yahoo.co.jp/pickup/world/rss.xml"
+  },
+  {
+    "Title": "Yahoo!ニュース・トピックス - 経済",
+    "RSS_URL": "https://news.yahoo.co.jp/pickup/economy/rss.xml"
+  },
+  {
+    "Title": "Yahoo!ニュース・トピックス - 国内",
+    "RSS_URL": "https://news.yahoo.co.jp/pickup/domestic/rss.xml"
+  },
+  {
+    "Title": "GIGAZINE",
+    "RSS_URL": "https://gigazine.net/news/rss_1.0/"
+  },
+  {
+    "Title": "UX MILK",
+    "RSS_URL": "https://uxmilk.jp/feed"
+  }
+]
