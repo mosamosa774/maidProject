@@ -1,7 +1,6 @@
 wiki,#wiki|(を(調|しら)べて)
 rss,#rss|(RSSを(追加|増や)して)
 greeting,#greeting|(おはよう|こんにちは|こんばんは)
-sleep,#sleep|(ね(て|る)|寝|おやすみ)
 wheather_rep,#wheather_rep|(天気)
 eat,#eat|(飯|ごはん)
 wake,#wake|(起き(て|ろ))

@@ -1,8 +1,5 @@
 # coding UTF-8
-<<<<<<< HEAD
 # ssh -R 52698:127.0.0.1:52698 pi@192.168.1.2
-=======
->>>>>>> 9775d396e946955024ab2083a12a307d5e76be87
 
 import asyncio
 import voiceGenerator
@@ -96,8 +93,6 @@ def addBookmarkedRSS(rss_dict,description,URL):
 async def callAction(act,d_today,now,mainChannel,newsChannel,client):
     if(act == "#1"):
         await actionList.Greeting(True,now.hour,mainChannel,client)
-    elif(act == "#2"):
-        await actionList.Sleep(True,now.hour,mainChannel,client)
     elif(act == "#3"):
         await actionList.CheckWheather(True,mainChannel,client)
     elif(act == "#4"):
@@ -213,22 +208,19 @@ async def on_message(message):
     elif (re.search(find_Command(commandName[2]), message.content) != None):
         await actionList.Greeting(onVoice,now.hour,message.channel,client)
     elif (re.search(find_Command(commandName[3]), message.content) != None):
-        await client.send_message(message.channel, 'わかりました。')
-        await actionList.Sleep(onVoice,now.hour,message.channel,client)
-    elif (re.search(find_Command(commandName[4]), message.content) != None):
         await actionList.CheckWheather(onVoice,message.channel,client)
-    elif (re.search(find_Command(commandName[5]), message.content) != None):
+    elif (re.search(find_Command(commandName[4]), message.content) != None):
         await actionList.EatMeal(onVoice,now.hour,message.channel,client)
-    elif (re.search(find_Command(commandName[6]), message.content) != None):
+    elif (re.search(find_Command(commandName[5]), message.content) != None):
         await client.send_message(message.channel, '無理です...')
-    elif (re.search(find_Command(commandName[7]), message.content) != None):
+    elif (re.search(find_Command(commandName[6]), message.content) != None):
         sen = "コマンドの一覧は以下のようになってます\n"
         for i in commandList:
             sen += "説明: "+i[0]+"　、コマンド: "+i[1]+"\n"
         await client.send_message(message.channel, sen)
-    elif (re.search(find_Command(commandName[8]), message.content) != None):
+    elif (re.search(find_Command(commandName[7]), message.content) != None):
         await actionList.checkQiitaTrend(onVoice,message.channel,client)
-    elif (re.search(find_Command(commandName[9]), message.content) != None):
+    elif (re.search(find_Command(commandName[8]), message.content) != None):
         clean_flag = True
         while (clean_flag):
             msgs = []
@@ -243,7 +235,7 @@ async def on_message(message):
                 if(onVoice):
                     voiceGenerator.callVoice('ログのお掃除が完了しました！疲れた...')
     else:
-        await reaction.hearVoice(onVoice,message.content,pre_react,reactList,message.channel,client)
+        await reaction.talk(onVoice,message.content,DocomoAPIKey,message.channel,client)
 
 commandName,commandList = readCommand()
 pre_react,reactList = readReaction()
