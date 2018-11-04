@@ -30,5 +30,9 @@
   {
     "Title": "UX MILK",
     "RSS_URL": "https://uxmilk.jp/feed"
+  },
+  {
+    "Title": "fabcross",
+    "RSS_URL": "https://fabcross.jp/rss.xml"
   }
 ]

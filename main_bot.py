@@ -1,5 +1,5 @@
 # coding UTF-8
-# ssh -R 52698:127.0.0.1:52698 pi@192.168.1.7
+# ssh -R 52698:127.0.0.1:52698 pi@192.168.1.2
 
 import asyncio
 import voiceGenerator
@@ -20,6 +20,7 @@ tokens = json.loads(txt)
 date = ["mon","tue","wed","thu","fri","sat","sun"]
 
 BOT_TOKEN = tokens['AccountToken']
+DocomoAPIKey = tokens['DocomoAPIKey']
 
 voiceGenerator.callVoice("起動しました。初期化を始めます...")
 
@@ -122,7 +123,7 @@ def timeInit():
 async def my_background_task(mainChannel,newsChannel):
     global now,d_today,c_date
     await client.wait_until_ready()
-    now,d_today,c_date =timeInit()
+    now,d_today,c_date = timeInit()
     schedule_date = c_date
     task_sch,time_sch = readSchedule(schedule_date)
 

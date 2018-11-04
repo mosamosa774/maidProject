@@ -1,4 +1,4 @@
-#encoding:utf-8
+#coding:utf-8
 import urllib.request, urllib.error,sys
 from urllib.parse import quote
 #install xmltodict
@@ -14,7 +14,6 @@ def get_rss_info(URL):
         return res
     except Exception as e:
         print ("Exception Error: ", e)
-        sys.exit(1)
         return None
 
 def set_rss_info(rss_json):
@@ -27,9 +26,9 @@ def set_rss_info(rss_json):
             articles = readRSS_ver1_0(rss_json,articles)
         except:
             articles = readRSS_ver2_0(rss_json,articles)
-    except TypeError:
-        pass  
-        print("error")
+    except TypeError as e:
+        print ("TypeError: ", e)
+        pass
     return articles
 
 def readRSS_ver1_0(rss_json,articles):
