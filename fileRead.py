@@ -26,6 +26,6 @@ def readCommand():
         data = f.read()
     data = data.split("\n") 
     for i in data:
-        description,command,no = i.split(",")
-        commandList.append( (description,command,no) )
+        description,command,no,useImg = i.split(",")
+        commandList.append( (description,command,no,useImg) )
     return commandList

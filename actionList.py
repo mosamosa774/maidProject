@@ -1,4 +1,5 @@
 import voiceGenerator
+import translateImg2Txt
 import weather
 import readRSS
 import fileRead
@@ -193,3 +194,9 @@ async def searchWord(onVoice,msg,channel,client):
 async def CaptureRoom(onVoice,channel,client): 
     await client.send_message(channel, "ちょっと待ってね！")
     await client.send_file(channel, capRoom.takeCapture(),content="今はこんな感じです")
+
+async def TranslateImg2Txt(onVoice,url,channel,client):
+    await client.send_message(channel, "ちょっと待ってね！")
+    filePlace = translateImg2Txt.translate(url)
+    await client.send_file(channel, filePlace, content="やってみたよ！")
+

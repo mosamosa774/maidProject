@@ -8,5 +8,5 @@ def analyze(msg,commandList):
 
     for i in commandList:
         if(re.search(i[1], msg) != None):
-            return onVoice,i[2]
-    return onVoice,"#4000"
+            return onVoice,i[2],i[3]=='True'
+    return onVoice,"#4000",False

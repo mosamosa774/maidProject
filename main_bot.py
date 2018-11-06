@@ -23,7 +23,7 @@ date = ["mon","tue","wed","thu","fri","sat","sun"]
 BOT_TOKEN = tokens['AccountToken']
 
 voiceGenerator.callVoice("起動しました。初期化を始めます...")
-
+url = None
 import discord
 client = discord.Client()
     
@@ -76,13 +76,26 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global now,d_today,c_date
+    global url
     # BOTとメッセージの送り主が同じ人なら処理しない
     if client.user == message.author:
         return
-    
-    onVoice,cmdNO = analyzeSentence.analyze(message.content,commandList)
-    await workInterface.callAction(onVoice,cmdNO,message.content,d_today,now,tokens,message.channel,client)
-     
+    if(len(message.attachments) == 0 and url == None):
+        onVoice,cmdNO,useImg = analyzeSentence.analyze(message.content,commandList)
+        if(not useImg):
+            await workInterface.callAction(onVoice,cmdNO,message.content,d_today,now,tokens,message.channel,client)
+    else:
+        if(url == None):
+            url = message.attachments[0]['url']
+        if(message.content != ""):
+            onVoice,cmdNO,useImg = analyzeSentence.analyze(message.content,commandList)
+            if(not useImg):
+                pass
+            await workInterface.callAction(onVoice,cmdNO,url,d_today,now,tokens,message.channel,client)
+            url = None
+        else:
+            await client.send_message(message.channel,"何すればいいんですか？")
+
 commandList = fileRead.readCommand()
 
 now,d_today,c_date = timeInit()

@@ -6,7 +6,10 @@ import discord
 
 async def callAction(onVoice,actNo,msg,d_today,now,tokens,channel,client):
     DocomoAPIKey = tokens['DocomoAPIKey']
-    mainChannel = discord.Object(id=tokens['General'])
+    if(channel != None):
+        mainChannel = channel
+    else:
+        mainChannel = discord.Object(id=tokens['General'])
     newsChannel = discord.Object(id=tokens['News'])
     if(actNo == "#1"):
         await actionList.Greeting(onVoice,now.hour,mainChannel,client)
@@ -32,5 +35,7 @@ async def callAction(onVoice,actNo,msg,d_today,now,tokens,channel,client):
         await actionList.cleanLog(onVoice,channel,client)
     elif(actNo == "#1005"):
         await actionList.CaptureRoom(onVoice,channel,client)
+    elif(actNo == "#1006"):
+        await actionList.TranslateImg2Txt(onVoice,msg,channel,client)
     elif(actNo == "#4000"):
         await reaction.talk(onVoice,msg,DocomoAPIKey,channel,client)
