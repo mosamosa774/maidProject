@@ -1,11 +1,15 @@
 import voiceGenerator
 import weather
 import readRSS
+import fileRead
 from time import sleep
 import asyncio
 import random
 import wiki
 import qiita
+import manageRSS
+import capRoom
+import re
 
 sleepHour = 6
 city_code = "070030" # 会津若松の都市コード
@@ -27,21 +31,7 @@ async def Greeting(onVoice,hour,channel,client): # #1
     if(onVoice):
         voiceGenerator.callVoice(sen)
 
-async def Sleep(onVoice,hour,channel,client): # #2
-    hour2 = hour + sleepHour
-    if(hour2 > 24):
-        hour2-=24
-    sen = "今は"+str(hour)+"時ですね。私は寝ます。おやすみなさい。私は"+str(hour2)+"時に起きます。"
-    await client.send_message(channel,sen)
-    if(onVoice):
-        voiceGenerator.callVoice(sen)
-    await asyncio.sleep(60*60*sleepHour)
-    sen = "目が覚めました。今..."+str(hour2)+"時ですね。"
-    await client.send_message(channel,sen)
-    if(onVoice):
-        voiceGenerator.callVoice(sen)
-
-async def CheckWheather(onVoice,channel,client): # #3
+async def CheckWheather(onVoice,channel,client): # #2
     date, fore_weather, min_temperature, max_temperature = weather.set_weather_info(weather.get_weather_info(city_code),0)
     sen = "今日の天気予報は"+str(fore_weather)+"となっています。"
     if(max_temperature != None):
@@ -52,31 +42,22 @@ async def CheckWheather(onVoice,channel,client): # #3
     if(onVoice):
         voiceGenerator.callVoice(sen)
 
-async def CheckTemp(onVoice): # #4
+async def CheckTemp(onVoice): # #3
     print("test3")
 
-async def CheckTime(onVoice,day,time,channel,client): # #5
+async def CheckTime(onVoice,day,time,channel,client): # #4
     sen = "今日は"+str(day.month)+"月"+str(day.day)+"日です。"
     if(time.hour >= 12):
         hour = "午後"+str(time.hour - 12)
     else:
         hour = "午前"+str(time.hour)
     sen += "今は、"+hour+"時、"+str(time.minute)+"分です。"
-    if(onVoice):
-        voiceGenerator.callVoice(sen)
-
-async def EatMeal(onVoice,hour,channel,client): # #6
-    if(hour >= 5 and hour <= 10):
-        sen = "朝ごはんですね！いただきます！"
-    elif(hour >= 11 and hour <= 17):
-        sen = "ランチタイムですね！いただきます!"
-    else:
-        sen = "晩ご飯ですよ。厳かに食べます。"
     await client.send_message(channel,sen)
     if(onVoice):
         voiceGenerator.callVoice(sen)
 
-async def soliloquy(onVoice,List,channel,client): # #7
+async def soliloquy(onVoice,channel,client): # #5
+    List = fileRead.readSoliloquy()
     word = randomGet(List)
     print(word)
     await client.send_message(channel,word)
@@ -116,7 +97,7 @@ async def checkQiita(onVoice,word,channel,client,num=10):
                 sen = "Qiitaで記事を見つけました！\n"
                 count=0
                 for i in res:
-                    sen+= "タイトル:"+i[0]+", URL:"+i[1]+", 最終更新日:"+i[2]+"\n"
+                    sen+= "タイトル:"+i[0]+"\nURL:"+i[1]+"　　最終更新日:"+i[2]+"\n"
                     count+=1
                     if(count == 15):
                         await client.send_message(channel,sen)
@@ -127,14 +108,15 @@ async def checkQiita(onVoice,word,channel,client,num=10):
         else:
             await client.send_message(channel,"見つかりませんでした...")
 
-async def checkNews(onVoice,channel,client,RSSDetails): # 8
+async def checkNews(onVoice,channel,client): # 6
+    import manageRSS
     await checkQiitaTrend(onVoice,channel,client)
-    for i in RSSDetails:
+    for i in manageRSS.readBookmarkedRSS():
         sen = i["Title"]+"から記事を集めてきました。\n"
         articles = readRSS.set_rss_info(readRSS.get_rss_info(i["RSS_URL"]))
         count=0
         for article in articles:
-            sen += "タイトル:"+article[0]+", URL:"+article[1]+"\n"
+            sen += "タイトル:"+article[0]+"\nURL:"+article[1]+"\n"
             count+=1
             if(count == 15):
                 await client.send_message(channel,sen)
@@ -149,7 +131,7 @@ async def checkQiitaTrend(onVoice,channel,client):
         sen = "Qiitaの三か月間のトレンドっぽい記事をいくつか報告します！\n"
         count=0
         for i in res:
-            sen+= "タイトル:"+i[0]+", URL:"+i[1]+", 最終更新日:"+i[2]+"\n"
+            sen+= "タイトル:"+i[0]+"\nURL:"+i[1]+"　　最終更新日:"+i[2]+"\n"
             count+=1
             if(count == 15):
                 await client.send_message(channel,sen)
@@ -157,3 +139,57 @@ async def checkQiitaTrend(onVoice,channel,client):
                 count,sen = massage_init()
         if(count != 0):
             await client.send_message(channel,sen)
+
+async def help(onVoice,channel,client):
+    sen = "コマンドの一覧は以下のようになってます\n"
+    for i in fileRead.readCommand():
+        sen += "説明: "+i[0]+"         コマンド: "+i[1]+"\n"
+    await client.send_message(channel, sen)
+
+async def cleanLog(onVoice,channel,client):
+    clean_flag = True
+    while (clean_flag):
+        msgs = []
+        async for msg in client.logs_from(channel, limit=98): #can only remove range[2-100]
+            msgs.append(msg) 
+        if len(msgs) > 1:
+            await client.delete_messages(msgs)
+            msgs.clear()
+        else:
+            clean_flag = False
+            await client.send_message(channel, 'ログのお掃除が完了しました！疲れた...')
+            if(onVoice):
+                voiceGenerator.callVoice('ログのお掃除が完了しました！疲れた...')
+
+async def addRSS(onVoice,msg,channel,client):
+    sen = ""
+    try:
+        title,url = msg.split("\"")[1],msg.split("\"")[3]
+        manageRSS.addBookmarkedRSS(manageRSS.readBookmarkedRSS(),title,url)
+        sen = title+":"+url+" のRSSを追加しましたよ。"
+    except:
+        if((re.search("リスト", msg)) != None):
+            sen = "ブックマークしたRSSの一覧は以下のようになってます\n"
+            for i in manageRSS.readBookmarkedRSS():
+                sen += "説明:" +i["Title"]+"　、URL: "+i["RSS_URL"]+"\n"
+        else:
+            sen = '入力ミスですね、おそらく。'
+    await client.send_message(channel, sen)
+
+async def searchWord(onVoice,msg,channel,client): 
+    if (re.search("(w|W)iki", msg) != None):
+        await checkWiki(onVoice,msg.split("\"")[1],channel,client)
+    elif (re.search("(q|Q)iita", msg) != None):
+        num = re.search(r'([0-9]+\.?[0-9]*)', msg)
+        if(num != None):
+            num = int(num.group())
+        else:
+            num = 50
+        await checkQiita(onVoice,msg.split("\"")[1],channel,client,num)
+    else:
+        await checkWiki(onVoice,msg.split("\"")[1],channel,client)
+        await checkQiita(onVoice,msg.split("\"")[1],channel,client)
+
+async def CaptureRoom(onVoice,channel,client): 
+    await client.send_message(channel, "ちょっと待ってね！")
+    await client.send_file(channel, capRoom.takeCapture(),content="今はこんな感じです")

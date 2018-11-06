@@ -1,9 +1,8 @@
-wiki,#wiki|(を(調|しら)べて)
-rss,#rss|(RSSを(追加|増や)して)
-greeting,#greeting|(おはよう|こんにちは|こんばんは)
-wheather_rep,#wheather_rep|(天気)
-eat,#eat|(飯|ごはん)
-wake,#wake|(起き(て|ろ))
-help,#help|(ヘルプ|へるぷ|man|コマンド|command)
-trend,#trend|(トレンド|話題)
-clear,#clear|(掃除して|clear|クリア|ログ掃除)
+wiki,#wiki|(?=.*(""))(?=.*((しら|調)べて|(探|さが)して)),#1000
+rss,#rss|(?=.*(RSS|rss))(?=.*(増やして|入れて|リスト)),#1001
+wheather_rep,#wheather_rep|(?=.*天気)(?=.*(調べて|教えて)),#2
+current_time,#ctime|(?=.*今)(?=.*時間),#4
+help,#help,#1002
+trend,#trend|(?=.*qiita)(?=.*(トレンド|話題)),#1003
+clear,#clear|(?=.*ログ)(?=.*(掃除|そうじ)),#1004
+capture,#capture|(?=.*部屋)(?=.*様子)(?=.*(見|み)),#1005

@@ -1,4 +1,6 @@
 import subprocess
+import os
+os.chdir("/home/pi/maidProj/schedule/")
 
 subprocess.call(("cp", "schedulemon.txt", "scheduletue.txt"))
 subprocess.call(("cp", "schedulemon.txt", "schedulewed.txt"))
