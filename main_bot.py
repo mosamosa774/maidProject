@@ -12,11 +12,9 @@ import re
 import os
 import workInterface
 os.chdir("/home/pi/maidProj/")
-import fileinput
-txt = ""
-for line in fileinput.input():
-    txt += line
-tokens = json.loads(txt)
+with open("dataset/Token.json", "r") as f:
+    data = f.read()
+tokens = json.loads(data)
 
 date = ["mon","tue","wed","thu","fri","sat","sun"]
 
@@ -61,7 +59,7 @@ async def my_background_task():
             except:
             	import traceback
             	traceback.print_exc()
-        await asyncio.sleep(60*10)
+        await asyncio.sleep(60*20)
         now,d_today,c_date =timeInit()
 
 @client.event

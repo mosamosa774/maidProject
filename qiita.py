@@ -23,7 +23,6 @@ def get_qiita_info(Num,KeyWord):
         return html_json
     except Exception as e:
         print ("Exception Error: ", e)
-        sys.exit(1)
         return None
 
 def set_qiita_info(html_json):
@@ -36,8 +35,7 @@ def set_qiita_info(html_json):
         return articles
     except TypeError:
         # temperature data is None etc...
-        pass  
-        return "error"
+        return None
 
 def get_TrendURL():
     duration = str(datetime.date.today())
@@ -53,5 +51,4 @@ def get_TrendURL():
         return articles
     except Exception as e:
         print ("Exception Error: ", e)
-        sys.exit(1)
         return None
